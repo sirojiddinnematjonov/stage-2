@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lexicon Pro — Vocabulary Builder</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #131c2e;
+      --card-border: #1e2d4a;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --accent-glow: rgba(99, 102, 241, 0.25);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --secondary: #1e293b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); display: flex; justify-content: center; min-height: 100vh; padding: 20px 16px; -webkit-font-smoothing: antialiased; }
+    .container { width: 100%; max-width: 580px; }
+    
+    header { text-align: center; margin-bottom: 20px; }
+    .logo { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(135deg, #a5b4fc 0%, #6366f1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
+    p.subtitle { color: var(--muted); font-size: 0.85rem; font-weight: 500; }
+
+    /* STREAK & PROGRESS STATS */
+    .stats-bar { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 12px 18px; border-radius: 14px; margin-bottom: 18px; font-size: 0.88rem; font-weight: 600; border: 1px solid var(--card-border); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    .streak { color: var(--warning); display: flex; align-items: center; gap: 6px; }
+
+    /* NAVIGATION TABS */
+    .nav-tabs { display: flex; gap: 6px; margin-bottom: 18px; background: rgba(19, 28, 46, 0.6); padding: 4px; border-radius: 12px; border: 1px solid var(--card-border); }
+    .tab-btn { flex: 1; padding: 10px 4px; border: none; background: transparent; color: var(--muted); font-size: 0.82rem; font-weight: 600; cursor: pointer; border-radius: 8px; transition: all 0.2s ease; text-align: center; }
+    .tab-btn.active { background: var(--accent); color: white; box-shadow: 0 2px 8px var(--accent-glow); }
+
+    /* CARDS & PANELS */
+    .card { background: var(--card-bg); padding: 20px; border-radius: 16px; border: 1px solid var(--card-border); box-shadow: 0 8px 24px rgba(0,0,0,0.25); margin-bottom: 18px; }
+    
+    .form-group { margin-bottom: 14px; }
+    label { display: block; margin-bottom: 6px; font-size: 0.8rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    input, textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--card-border); background: #0b111e; color: white; border-radius: 10px; font-size: 0.95rem; transition: border 0.2s; }
+    input:focus, textarea:focus { outline: none; border-color: var(--accent); }
+
+    .btn { width: 100%; padding: 13px; border: none; background: var(--accent); color: white; font-size: 0.95rem; font-weight: 600; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; }
+    .btn:active { transform: scale(0.98); }
+    .btn-secondary { background: var(--secondary); margin-top: 10px; font-size: 0.88rem; border: 1px solid var(--card-border); color: var(--muted); }
+    .btn-secondary:hover { color: white; background: #26334d; }
+
+    /* WORD LIST */
+    .word-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .word-item:last-child { border-bottom: none; }
+    .word-term { font-weight: 700; font-size: 1.05rem; color: #f1f5f9; }
+    .word-def { color: var(--muted); font-size: 0.88rem; margin-top: 3px; line-height: 1.3; }
+    .delete-btn { background: none; border: none; color: #64748b; cursor: pointer; font-size: 1.3rem; padding: 4px 8px; transition: color 0.2s; }
+    .delete-btn:hover { color: var(--danger); }
+
+    /* FLASHCARD COMPONENT */
+    .quiz-card { text-align: center; min-height: 210px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; border: 2px dashed var(--card-border); user-select: none; transition: all 0.2s; position: relative; background: #0e1626; }
+    .quiz-card:hover { border-color: var(--accent); }
+    .prompt-label { font-size: 0.75rem; color: var(--accent); text-transform: uppercase; font-weight: 700; margin-bottom: 12px; letter-spacing: 1px; }
+    .quiz-term { font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; word-break: break-word; color: #fff; }
+    .quiz-def { font-size: 1.05rem; color: var(--muted); display: none; margin-top: 12px; line-height: 1.4; animation: fadeIn 0.3s forwards; }
+
+    /* MULTIPLE CHOICE OPTIONS */
+    .mc-options { display: grid; gap: 10px; margin-top: 16px; }
+    .mc-btn { background: #0b111e; border: 1px solid var(--card-border); color: #e2e8f0; padding: 14px; border-radius: 10px; font-size: 0.92rem; cursor: pointer; text-align: left; transition: all 0.2s; line-height: 1.3; }
+    .mc-btn:hover { border-color: var(--accent); }
+    .mc-btn.correct-choice { background: #064e3b !important; border-color: var(--success) !important; color: #a7f3d0; }
+    .mc-btn.wrong-choice { background: #7f1d1d !important; border-color: var(--danger) !important; color: #feccae; }
+
+    /* TYPING INPUT */
+    .type-feedback { font-weight: 700; margin-top: 14px; text-align: center; font-size: 0.95rem; }
+
+    .quiz-actions { display: flex; gap: 10px; margin-top: 18px; }
+    .btn-correct { background: #059669; }
+    .btn-wrong { background: #dc2626; }
+    
+    .hidden { display: none !important; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="logo">Lexicon Pro</div>
+    <p class="subtitle">Personal Vocabulary & Recall Suite</p>
+  </header>
+
+  <!-- STREAK & STATS -->
+  <div class="stats-bar">
+    <span class="streak">🔥 <span id="streakCount">0</span> Day Streak</span>
+    <span style="color: var(--muted);">Reviewed Today: <b id="todayCount" style="color: var(--text);">0</b></span>
+  </div>
+
+  <!-- NAVIGATION TABS -->
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('manage')">Manage</button>
+    <button class="tab-btn" onclick="switchTab('cards')">Flashcards</button>
+    <button class="tab-btn" onclick="switchTab('mc')">Quiz</button>
+    <button class="tab-btn" onclick="switchTab('type')">Spelling</button>
+  </div>
+
+  <!-- MANAGE TAB -->
+  <div id="manageTab">
+    <div class="card">
+      <div class="form-group">
+        <label for="wordInput">Add New Word / Phrase</label>
+        <input type="text" id="wordInput" placeholder="e.g., Ephemeral">
+      </div>
+      <div class="form-group">
+        <label for="meaningInput">Meaning / Definition</label>
+        <textarea id="meaningInput" rows="2" placeholder="e.g., Lasting for a very short time."></textarea>
+      </div>
+      <button class="btn" onclick="addWord()">Add Word</button>
+
+      <div style="margin-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;">
+        <button class="btn btn-secondary" style="border-color: #7f1d1d; color: #fca5a5;" onclick="resetToDefault()">🔄 Reset to New Word List (34 Words)</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="form-group">
+        <label for="searchInput">🔍 Search Vocabulary</label>
+        <input type="text" id="searchInput" placeholder="Type to filter..." oninput="renderWordList()">
+      </div>
+      <h3 style="margin-bottom: 12px; font-size: 0.95rem; color: var(--muted); font-weight: 600;">Saved Terms (<span id="wordCount">0</span>)</h3>
+      <div id="wordList"></div>
+    </div>
+  </div>
+
+  <!-- FLASHCARDS TAB -->
+  <div id="cardsTab" class="hidden">
+    <div class="card">
+      <div class="card quiz-card" onclick="toggleAnswer()">
+        <span class="prompt-label" id="cardState">Tap to reveal answer</span>
+        <div class="quiz-term" id="cardTerm">...</div>
+        <div class="quiz-def" id="cardDef">...</div>
+      </div>
+      <div class="quiz-actions hidden" id="cardControls">
+        <button class="btn btn-wrong" onclick="nextCard(false)">Needs Work ❌</button>
+        <button class="btn btn-correct" onclick="nextCard(true)">Mastered ✅</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MULTIPLE CHOICE TAB -->
+  <div id="mcTab" class="hidden">
+    <div class="card">
+      <span class="prompt-label">Select the correct definition:</span>
+      <div class="quiz-term" id="mcTerm" style="margin-top:10px;">...</div>
+      <div class="mc-options" id="mcOptions"></div>
+      <button class="btn btn-secondary hidden" id="mcNextBtn" style="margin-top:16px;" onclick="startMCQuiz()">Next Word ➔</button>
+    </div>
+  </div>
+
+  <!-- SPELLING TAB -->
+  <div id="typeTab" class="hidden">
+    <div class="card">
+      <span class="prompt-label">Type the corresponding word:</span>
+      <div class="word-def" id="typeDef" style="font-size:1.1rem; color:#fff; margin: 14px 0 18px 0; font-weight: 500;">...</div>
+      <div>
+        <input type="text" id="typeInput" placeholder="Type answer..." autocomplete="off">
+        <button class="btn" style="margin-top:12px;" onclick="checkTypeAnswer()">Verify Answer</button>
+      </div>
+      <div class="type-feedback" id="typeFeedback"></div>
+      <button class="btn btn-secondary hidden" id="typeNextBtn" style="margin-top:16px;" onclick="startTypeQuiz()">Next Word ➔</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Complete 34 Words Array
+  const defaultWords = [
+    {"id":1,"term":"Glossary","meaning":"so'zlar ruyhati"},
+    {"id":2,"term":"Foreign","meaning":"chet el"},
+    {"id":3,"term":"Foreigner","meaning":"chet ellik"},
+    {"id":4,"term":"Gist","meaning":"umumiy mano"},
+    {"id":5,"term":"Recognize sb/sth","meaning":"tanimoq"},
+    {"id":6,"term":"Identify","meaning":"aniqlamoq"},
+    {"id":7,"term":"Identification","meaning":"tasdiq"},
+    {"id":8,"term":"Go through sth","meaning":"sinchiklab o'qish, boshdan kechirmoq"},
+    {"id":9,"term":"Suppose, guess, predict","meaning":"taxmin qilmoq"},
+    {"id":10,"term":"Keep a record","meaning":"yozib olmoq"},
+    {"id":11,"term":"Record","meaning":"videoga olish, rekord"},
+    {"id":12,"term":"Make a note of sth","meaning":"yozib olmoq"},
+    {"id":13,"term":"Construction","meaning":"gap tuzilishi"},
+    {"id":14,"term":"Tip","meaning":"maslahat , choy chaqa"},
+    {"id":15,"term":"Repetition","meaning":"qaytarish"},
+    {"id":16,"term":"Explain","meaning":"tushuntirmoq"},
+    {"id":17,"term":"Pronounce","meaning":"talaffuz qilmoq"},
+    {"id":18,"term":"Opportunity","meaning":"imkoniyat"},
+    {"id":19,"term":"Revise","meaning":"takrorlash"},
+    {"id":20,"term":"Method","meaning":"usul"},
+    {"id":21,"term":"Quite","meaning":"ozgina"},
+    {"id":22,"term":"Aim, goal, purpose","meaning":"maqsad"},
+    {"id":23,"term":"Enthusiastic","meaning":"qiziqqan"},
+    {"id":24,"term":"Motivated","meaning":"ruhlangan"},
+    {"id":25,"term":"Encourage, motivate","meaning":"dalda bermoq"},
+    {"id":26,"term":"Improve, get better, make progress","meaning":"o’stirish , yaxshilash"},
+    {"id":27,"term":"Express","meaning":"ifodalab bermoq"},
+    {"id":28,"term":"Effectively","meaning":"samarali"},
+    {"id":29,"term":"Obvious, clear","meaning":"tiniq ,aniq"},
+    {"id":30,"term":"Encouraging","meaning":"ruhlantiradigan"},
+    {"id":31,"term":"Accurately","meaning":"bexato"},
+    {"id":32,"term":"Be aware of sth","meaning":"xabardor bo'lmoq"},
+    {"id":33,"term":"Frustrating","meaning":"xafsalani pir qiladigan"},
+    {"id":34,"term":"Awareness","meaning":"ogohlik"}
+  ];
+
+  let words = JSON.parse(localStorage.getItem('lexicon_words')) || defaultWords;
+  let stats = JSON.parse(localStorage.getItem('lexicon_stats')) || { streak: 0, lastDate: '', todayCount: 0 };
+  let currentWord = null;
+
+  function checkStreak() {
+    const today = new Date().toISOString().split('T')[0];
+    if (stats.lastDate !== today) {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+      if (stats.lastDate !== yesterdayStr && stats.lastDate !== '') {
+        stats.streak = 0;
+      }
+      stats.todayCount = 0;
+    }
+    document.getElementById('streakCount').textContent = stats.streak;
+    document.getElementById('todayCount').textContent = stats.todayCount;
+  }
+
+  function incrementReview() {
+    const today = new Date().toISOString().split('T')[0];
+    if (stats.lastDate !== today) {
+      stats.streak += 1;
+      stats.lastDate = today;
+    }
+    stats.todayCount += 1;
+    localStorage.setItem('lexicon_stats', JSON.stringify(stats));
+    checkStreak();
+  }
+
+  function saveAndRender() {
+    localStorage.setItem('lexicon_words', JSON.stringify(words));
+    renderWordList();
+  }
+
+  function addWord() {
+    const term = document.getElementById('wordInput').value.trim();
+    const meaning = document.getElementById('meaningInput').value.trim();
+    if (!term || !meaning) return alert("Please fill in both word and definition!");
+    words.push({ id: Date.now(), term, meaning });
+    document.getElementById('wordInput').value = '';
+    document.getElementById('meaningInput').value = '';
+    saveAndRender();
+  }
+
+  function deleteWord(id) {
+    words = words.filter(w => w.id !== id);
+    saveAndRender();
+  }
+
+  function resetToDefault() {
+    if (confirm("Reset to full 34 words list?")) {
+      words = [...defaultWords];
+      saveAndRender();
+    }
+  }
+
+  function renderWordList() {
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    const listEl = document.getElementById('wordList');
+    const filtered = words.filter(w => w.term.toLowerCase().includes(query) || w.meaning.toLowerCase().includes(query));
+    document.getElementById('wordCount').textContent = words.length;
+
+    if (filtered.length === 0) {
+      listEl.innerHTML = '<p style="color:var(--muted); text-align:center; padding:12px;">No matching words found.</p>';
+      return;
+    }
+
+    listEl.innerHTML = filtered.map(w => `
+      <div class="word-item">
+        <div>
+          <div class="word-term">${w.term}</div>
+          <div class="word-def">${w.meaning}</div>
+        </div>
+        <button class="delete-btn" onclick="deleteWord(${w.id})">&times;</button>
+      </div>
+    `).join('');
+  }
+
+  /* FLASHCARD ENGINE */
+  function startCards() {
+    if (words.length === 0) return;
+    currentWord = words[Math.floor(Math.random() * words.length)];
+    document.getElementById('cardState').textContent = 'Tap to reveal answer';
+    document.getElementById('cardTerm').textContent = currentWord.term;
+    document.getElementById('cardDef').textContent = currentWord.meaning;
+    document.getElementById('cardDef').style.display = 'none';
+    document.getElementById('cardControls').classList.add('hidden');
+  }
+
+  function toggleAnswer() {
+    if (!currentWord) return;
+    const defEl = document.getElementById('cardDef');
+    const isHidden = defEl.style.display === 'none';
+    defEl.style.display = isHidden ? 'block' : 'none';
+    document.getElementById('cardState').textContent = isHidden ? 'Definition:' : 'Tap to reveal answer';
+    document.getElementById('cardControls').classList.toggle('hidden', !isHidden);
+  }
+
+  function nextCard(success) {
+    if (success) incrementReview();
+    startCards();
+  }
+
+  /* MULTIPLE CHOICE ENGINE */
+  function startMCQuiz() {
+    if (words.length < 4) return alert("Add at least 4 words to enable Quiz mode!");
+    document.getElementById('mcNextBtn').classList.add('hidden');
+    currentWord = words[Math.floor(Math.random() * words.length)];
+    document.getElementById('mcTerm').textContent = currentWord.term;
+
+    let wrongPool = words.filter(w => w.id !== currentWord.id);
+    wrongPool.sort(() => 0.5 - Math.random());
+    let choices = [currentWord, wrongPool[0], wrongPool[1], wrongPool[2]];
+    choices.sort(() => 0.5 - Math.random());
+
+    const optionsContainer = document.getElementById('mcOptions');
+    optionsContainer.innerHTML = choices.map(c => `
+      <button class="mc-btn" onclick="checkMCOption(this, ${c.id === currentWord.id})">${c.meaning}</button>
+    `).join('');
+  }
+
+  function checkMCOption(btn, isCorrect) {
+    const allBtns = document.querySelectorAll('.mc-btn');
+    allBtns.forEach(b => b.disabled = true);
+
+    if (isCorrect) {
+      btn.classList.add('correct-choice');
+      incrementReview();
+    } else {
+      btn.classList.add('wrong-choice');
+    }
+    document.getElementById('mcNextBtn').classList.remove('hidden');
+  }
+
+  /* SPELLING ENGINE */
+  function startTypeQuiz() {
+    if (words.length === 0) return;
+    document.getElementById('typeNextBtn').classList.add('hidden');
+    document.getElementById('typeFeedback').textContent = '';
+    document.getElementById('typeInput').value = '';
+    document.getElementById('typeInput').disabled = false;
+
+    currentWord = words[Math.floor(Math.random() * words.length)];
+    document.getElementById('typeDef').textContent = currentWord.meaning;
+  }
+
+  function checkTypeAnswer() {
+    const input = document.getElementById('typeInput').value.trim().toLowerCase();
+    const cleanTarget = currentWord.term.replace(/\s*\([^)]*\)/g, "").trim().toLowerCase();
+    const feedback = document.getElementById('typeFeedback');
+
+    if (input === cleanTarget) {
+      feedback.textContent = "Correct! ✨";
+      feedback.style.color = "var(--success)";
+      document.getElementById('typeInput').disabled = true;
+      document.getElementById('typeNextBtn').classList.remove('hidden');
+      incrementReview();
+    } else {
+      feedback.textContent = `Incorrect. Correct word: "${cleanTarget}"`;
+      feedback.style.color = "var(--danger)";
+      document.getElementById('typeNextBtn').classList.remove('hidden');
+    }
+  }
+
+  /* TAB CONTROLLER */
+  function switchTab(tab) {
+    ['manageTab', 'cardsTab', 'mcTab', 'typeTab'].forEach(t => document.getElementById(t).classList.add('hidden'));
+    const btns = document.querySelectorAll('.tab-btn');
+    btns.forEach(b => b.classList.remove('active'));
+
+    if (tab === 'manage') {
+      document.getElementById('manageTab').classList.remove('hidden');
+      btns[0].classList.add('active');
+    } else if (tab === 'cards') {
+      document.getElementById('cardsTab').classList.remove('hidden');
+      btns[1].classList.add('active');
+      startCards();
+    } else if (tab === 'mc') {
+      document.getElementById('mcTab').classList.remove('hidden');
+      btns[2].classList.add('active');
+      startMCQuiz();
+    } else if (tab === 'type') {
+      document.getElementById('typeTab').classList.remove('hidden');
+      btns[3].classList.add('active');
+      startTypeQuiz();
+    }
+  }
+
+  checkStreak();
+  renderWordList();
+</script>
+</body>
+</html>
