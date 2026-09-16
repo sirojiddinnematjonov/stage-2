@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lexicon Pro — Advanced Vocabulary Suite</title>
+  <title>For Pumkinsss 😁 — Vocabulary & Memory Suite</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     :root {
@@ -36,8 +36,8 @@
 
     .container { width: 100%; max-width: 580px; }
     header { text-align: center; margin-bottom: 16px; }
-    .logo { font-size: 1.6rem; font-weight: 800; background: linear-gradient(135deg, #a5b4fc, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 2px; }
-    p.subtitle { color: var(--muted); font-size: 0.85rem; font-weight: 500; }
+    .logo { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #a5b4fc, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 2px; }
+    p.subtitle { color: var(--muted); font-size: 0.88rem; font-weight: 500; }
 
     /* THEME SELECTOR */
     .theme-bar { display: flex; gap: 8px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
@@ -61,14 +61,14 @@
     .btn-secondary { background: var(--secondary); margin-top: 10px; font-size: 0.88rem; border: 1px solid var(--card-border); color: var(--muted); }
     .btn-secondary:hover { color: white; background: rgba(38, 51, 77, 0.9); }
 
-    /* WORD LIST & EXAMPLES (BOSH MENYU) */
+    /* WORD LIST & EXAMPLES */
     .word-item { padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
     .word-item:last-child { border-bottom: none; }
     .word-term { font-weight: 700; font-size: 1.05rem; color: #f1f5f9; }
     .word-def { color: var(--muted); font-size: 0.88rem; margin-top: 3px; line-height: 1.3; }
     .word-example { font-style: italic; font-size: 0.82rem; color: #a5b4fc; margin-top: 5px; line-height: 1.3; }
 
-    /* ORIGINAL FLASHCARD COMPONENT */
+    /* FLASHCARD COMPONENT */
     .quiz-card { text-align: center; min-height: 220px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; border: 2px dashed var(--card-border); user-select: none; transition: transform 0.2s ease, border-color 0.2s; position: relative; background: rgba(14, 22, 38, 0.85); touch-action: pan-y; }
     .quiz-card:hover { border-color: var(--accent); }
     .prompt-label { font-size: 0.75rem; color: #818cf8; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; letter-spacing: 1px; }
@@ -102,8 +102,8 @@
 
 <div class="container">
   <header>
-    <div class="logo">Lexicon Pro</div>
-    <p class="subtitle">Vocabulary & Memory Suite</p>
+    <div class="logo">For Pumkinsss 😁</div>
+    <p class="subtitle">Interactive Vocabulary & Practice Suite</p>
   </header>
 
   <!-- THEME SWITCHER -->
@@ -127,7 +127,7 @@
     <button class="tab-btn" onclick="switchTab('type')">Spelling</button>
   </div>
 
-  <!-- VOCABULARY TAB (GAPLAR SHU YERDA QOLDI) -->
+  <!-- VOCABULARY TAB -->
   <div id="manageTab">
     <div class="card">
       <input type="text" id="searchInput" placeholder="🔍 Search vocabulary..." oninput="renderWordList()">
@@ -147,7 +147,7 @@
     </div>
   </div>
 
-  <!-- ORIGINAL FLASHCARDS TAB -->
+  <!-- FLASHCARDS TAB -->
   <div id="cardsTab" class="hidden">
     <div class="card">
       <div class="card quiz-card" id="flashcardEl" onclick="toggleAnswer()">
@@ -201,15 +201,15 @@
     {"id":11,"term":"Record","meaning":"videoga olish, rekord","ex":"He broke the world record yesterday."},
     {"id":12,"term":"Make a note of sth","meaning":"yozib olmoq","ex":"Make a note of these crucial terms."},
     {"id":13,"term":"Construction","meaning":"gap tuzilishi","ex":"Sentence construction requires practice."},
-    {"id":14,"term":"Tip","meaning":"maslahat , choy chaqa","ex":"Here is a tip for better IELTS writing."},
+    {"id":14,"term":"Tip","meaning":"maslahat , choy chaqa","ex":"Here is a tip for better sentence building."},
     {"id":15,"term":"Repetition","meaning":"qaytarish","ex":"Vocabulary learning requires repetition."},
     {"id":16,"term":"Explain","meaning":"tushuntirmoq","ex":"Can you explain this rule again?"},
     {"id":17,"term":"Pronounce","meaning":"talaffuz qilmoq","ex":"Practice to pronounce difficult words clearly."},
     {"id":18,"term":"Opportunity","meaning":"imkoniyat","ex":"Grasp every opportunity to speak English."},
     {"id":19,"term":"Revise","meaning":"takrorlash","ex":"Revise your notes before the test."},
     {"id":20,"term":"Method","meaning":"usul","ex":"Choose an effective study method."},
-    {"id":21,"term":"Quite","meaning":"ozgina","ex":"The exam was quite challenging."},
-    {"id":22,"term":"Aim, goal, purpose","meaning":"maqsad","ex":"My ultimate aim is an 8.0 writing score."},
+    {"id":21,"term":"Quite","meaning":"ozgina","ex":"The lesson was quite interesting."},
+    {"id":22,"term":"Aim, goal, purpose","meaning":"maqsad","ex":"My main aim is to speak fluently."},
     {"id":23,"term":"Enthusiastic","meaning":"qiziqqan","ex":"She is enthusiastic about learning new skills."},
     {"id":24,"term":"Motivated","meaning":"ruhlangan","ex":"Highly motivated students progress faster."},
     {"id":25,"term":"Encourage, motivate","meaning":"dalda bermoq","ex":"Teachers should encourage active debate."},
@@ -227,45 +227,26 @@
     {"id":37,"term":"Complex","meaning":"qiyin , murakkab","ex":"Avoid overly complex sentence structures."},
     {"id":38,"term":"Fluent","meaning":"ravon","ex":"She became fluent after studying abroad."},
     {"id":39,"term":"In detail","meaning":"to’liq","ex":"Explain your arguments in detail."},
-    {"id":40,"term":"Appropriate","meaning":"mos muvofiq","ex":"Select language appropriate for academic essays."},
+    {"id":40,"term":"Appropriate","meaning":"mos muvofiq","ex":"Select language appropriate for formal writing."},
     {"id":41,"term":"Relevant to sth","meaning":"nimadir bilan bog’liq","ex":"Include only details relevant to the topic."},
-    {"id":42,"term":"Specialized","meaning":"ixtisoslashtirilgan","ex":"He studies specialized medical terminology."},
+    {"id":42,"term":"Specialized","meaning":"ixtisoslashtirilgan","ex":"He studies specialized terminology."},
     {"id":43,"term":"Violence","meaning":"zo’ravonlik","ex":"Media should avoid displaying violence."},
     {"id":44,"term":"For instance","meaning":"misol uchun","ex":"For instance, urbanization causes traffic jams."},
-    {"id":45,"term":"Slang","meaning":"ko’cha tili","ex":"Avoid slang in formal academic writing."},
+    {"id":45,"term":"Slang","meaning":"ko’cha tili","ex":"Avoid slang in formal contexts."},
     {"id":46,"term":"Offensive","meaning":"haqorat","ex":"His comments were deemed offensive."},
     {"id":47,"term":"Offend sb","meaning":"haqoratlamoq","ex":"Be careful not to offend anyone."},
     {"id":48,"term":"Syllable","meaning":"bo’g’in","ex":"The word 'understand' has three syllables."},
     {"id":49,"term":"Select, choose","meaning":"tanlamoq","ex":"Select the correct option from below."},
     {"id":50,"term":"Selection, choice","meaning":"tanlov","ex":"A wide selection of books is available."},
     {"id":51,"term":"Stress","meaning":"urg’u bermoq","ex":"Stress the second syllable of the word."},
-    {"id":52,"term":"Emphasize","meaning":"urg’u bermoq","ex":"Emphasize key points in your conclusion."}
+    {"id":52,"term":"Emphasize","meaning":"urg’u bermoq","ex":"Emphasize key points in your talk."}
   ];
 
-  let wordWeights = JSON.parse(localStorage.getItem('lexicon_weights')) || {};
+  let wordWeights = JSON.parse(localStorage.getItem('pumkin_weights')) || {};
   words.forEach(w => { if(!wordWeights[w.id]) wordWeights[w.id] = 3; });
 
-  let stats = JSON.parse(localStorage.getItem('lexicon_stats')) || { streak: 0, lastDate: '', todayCount: 0 };
+  let stats = JSON.parse(localStorage.getItem('pumkin_stats')) || { streak: 0, lastDate: '', todayCount: 0 };
   let currentWord = null;
-
-  function playSound(type) {
-    try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain); gain.connect(ctx.destination);
-      if(type === 'correct') {
-        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
-        osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.1, ctx.currentTime);
-        osc.start(); osc.stop(ctx.currentTime + 0.25);
-      } else {
-        osc.frequency.setValueAtTime(200, ctx.currentTime);
-        gain.gain.setValueAtTime(0.1, ctx.currentTime);
-        osc.start(); osc.stop(ctx.currentTime + 0.2);
-      }
-    } catch(e) {}
-  }
 
   function triggerConfetti() {
     try { confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 } }); } catch(e){}
@@ -297,7 +278,7 @@
     if(!wordWeights[id]) wordWeights[id] = 3;
     if(success) wordWeights[id] = Math.max(1, wordWeights[id] - 1);
     else wordWeights[id] = Math.min(8, wordWeights[id] + 2);
-    localStorage.setItem('lexicon_weights', JSON.stringify(wordWeights));
+    localStorage.setItem('pumkin_weights', JSON.stringify(wordWeights));
   }
 
   function checkStreak() {
@@ -315,7 +296,7 @@
     const today = new Date().toISOString().split('T')[0];
     if (stats.lastDate !== today) { stats.streak += 1; stats.lastDate = today; }
     stats.todayCount += 1;
-    localStorage.setItem('lexicon_stats', JSON.stringify(stats));
+    localStorage.setItem('pumkin_stats', JSON.stringify(stats));
     checkStreak();
   }
 
@@ -360,7 +341,6 @@
       el.classList.add('selected');
     } else {
       if(matchSelected.dataset.id === el.dataset.id) {
-        playSound('correct');
         matchSelected.classList.add('matched');
         el.classList.add('matched');
         matchesLeft--;
@@ -370,14 +350,13 @@
           incrementReview();
         }
       } else {
-        playSound('wrong');
         matchSelected.classList.remove('selected');
       }
       matchSelected = null;
     }
   }
 
-  /* ORIGINAL FLASHCARDS LOGIC */
+  /* FLASHCARDS LOGIC */
   function startCards() {
     currentWord = getWeightedWord();
     document.getElementById('cardState').textContent = 'Tap to reveal answer';
@@ -397,7 +376,7 @@
 
   function nextCard(success) {
     adjustWeight(currentWord.id, success);
-    if(success) { playSound('correct'); incrementReview(); } else playSound('wrong');
+    if(success) incrementReview();
     startCards();
   }
 
@@ -416,8 +395,8 @@
   function checkMC(btn, isCorrect) {
     document.querySelectorAll('.mc-btn').forEach(b => b.disabled = true);
     adjustWeight(currentWord.id, isCorrect);
-    if(isCorrect) { btn.classList.add('correct-choice'); playSound('correct'); triggerConfetti(); incrementReview(); }
-    else { btn.classList.add('wrong-choice'); playSound('wrong'); }
+    if(isCorrect) { btn.classList.add('correct-choice'); triggerConfetti(); incrementReview(); }
+    else { btn.classList.add('wrong-choice'); }
     document.getElementById('mcNextBtn').classList.remove('hidden');
   }
 
@@ -438,10 +417,10 @@
 
     if(input === cleanTarget) {
       fb.textContent = "Correct! ✨"; fb.style.color = "var(--success)";
-      playSound('correct'); triggerConfetti(); adjustWeight(currentWord.id, true); incrementReview();
+      triggerConfetti(); adjustWeight(currentWord.id, true); incrementReview();
     } else {
       fb.textContent = `Incorrect. Target: "${cleanTarget}"`; fb.style.color = "var(--danger)";
-      playSound('wrong'); adjustWeight(currentWord.id, false);
+      adjustWeight(currentWord.id, false);
     }
     document.getElementById('typeInput').disabled = true;
     document.getElementById('typeNextBtn').classList.remove('hidden');
